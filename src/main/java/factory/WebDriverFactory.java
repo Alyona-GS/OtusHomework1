@@ -7,6 +7,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
@@ -14,7 +15,7 @@ import java.util.Locale;
 
 public class WebDriverFactory {
 
-    private final String browserName = System.getProperty("browser.name");
+    private final String browserName = "firefox";//System.getProperty("browser.name");
 
     public WebDriver create() {
         return switch (browserName) {

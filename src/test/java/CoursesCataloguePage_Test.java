@@ -6,19 +6,19 @@ public class CoursesCataloguePage_Test {
     CoursesCataloguePage coursesCataloguePage = new CoursesCataloguePage();
 
     @Test
-    public void CheckCourseOpenedByCoursePlate() {
+    public void checkCourseOpenedByCoursePlate() {
         coursesCataloguePage
                 .open()
-                .findCoursePlateByCourseName("course_name")
-                .clickCoursePlate()
-                .pageHeaderShouldBeSameAs("Делись знаниями");
+                .findCoursePlateByCourseName("Symfony Framework")
+                .clickCoursePlate("Symfony Framework")
+                .pageHeaderShouldBeSameAs("Symfony Framework");
     }
 
     @Test
-    public void CheckNameAndDateOnCoursePlate() {
+    public void checkNameAndDateOnCoursePlate() {
         coursesCataloguePage
                 .open()
-                .findTheOldestAndYoungestCoursesByApi()
-                .NameAndDateOnPlateIsRight();
+                .findCourses()
+                .nameAndDateOnPlateIsRight();
     }
 }

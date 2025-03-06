@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.Test;
 import pages.MainPage;
 
 public class MainPage_Test {
@@ -9,7 +10,7 @@ public class MainPage_Test {
         mainPage
                 .open()
                 .clickMenuLearning()
-                .clickRandomCategory()
-                .checkCatalogue();
+                .clickRandomCategoryInMenu()
+                .checkCatalogueUrl();
     }
 }

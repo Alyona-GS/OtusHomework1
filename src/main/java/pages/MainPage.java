@@ -1,7 +1,39 @@
 package pages;
 
 import annotations.Path;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import javax.swing.text.Highlighter;
+import java.util.List;
 
 @Path("/")
 public class MainPage extends AbsBasePage {
+    public MainPage() {
+        super();
+    }
+
+    public MainPage clickMenuLearning() {
+        findElement(By.xpath("//*[contains(@class, 'sc-1youhxc-1 cMNIlZ')]")).click();
+        return this;
+    }
+    public CoursesCataloguePage clickRandomCategoryInMenu() {
+        List<WebElement> categoriesInMenu = driver.findElements(By.xpath("//*[contains(@class, 'sc-1pgqitk-0 dNitgt')]")).stream().toList();
+        Integer choice = (int) (Math.random() * categoriesInMenu.size());
+        WebElement category = categoriesInMenu.get(choice);
+        String categoryText = category.getText();
+        System.out.println(categoryText);
+        //HIGHLIGHT CATEGORY
+        category.click();
+        return new CoursesCataloguePage(categoryText);
+    }
+
+    public MainPage open() {
+
+        String path = getPath();
+
+        driver.get(baseUrl + path);
+        driver.manage().window().maximize();
+        return this;
+    }
 }
