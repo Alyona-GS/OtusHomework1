@@ -4,7 +4,6 @@ import annotations.Path;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-import javax.swing.text.Highlighter;
 import java.util.List;
 
 @Path("/")
@@ -18,12 +17,11 @@ public class MainPage extends AbsBasePage {
         return this;
     }
     public CoursesCataloguePage clickRandomCategoryInMenu() {
-        List<WebElement> categoriesInMenu = driver.findElements(By.xpath("//*[contains(@class, 'sc-1pgqitk-0 dNitgt')]")).stream().toList();
-        Integer choice = (int) (Math.random() * categoriesInMenu.size());
+        List<WebElement> categoriesInMenu = driver.findElements(By.xpath("//a[contains(@href, 'https://otus.ru/categories/')]")).stream().toList();
+        int choice = (int) (Math.random() * categoriesInMenu.size());
         WebElement category = categoriesInMenu.get(choice);
         String categoryText = category.getText();
         System.out.println(categoryText);
-        //HIGHLIGHT CATEGORY
         category.click();
         return new CoursesCataloguePage(categoryText);
     }

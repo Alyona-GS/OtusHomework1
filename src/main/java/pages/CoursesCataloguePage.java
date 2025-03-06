@@ -42,7 +42,7 @@ public class CoursesCataloguePage extends AbsBasePage {
                     courseNotVisible = false;
                     break;
                 }
-            };
+            }
             if (courseNotVisible) {
                 buttonShowMore.click();
             } else {
@@ -74,12 +74,13 @@ public class CoursesCataloguePage extends AbsBasePage {
             String plateText = plate.getText();
             System.out.println(plateText);
             String[] splittedText = plateText.split("/n");
-            courses.add(new Course(splittedText[0], Date.valueOf(splittedText[2]));
+            courses.add(new Course(splittedText[0], Date.valueOf(splittedText[2])));
         });
-        Date youngestCourseDate = courses.stream().reduce();
-        Date oldestCourseDate = courses.stream().reduce();
-        Course[] youngestCourses = courses.stream().reduce();
-        Course[] oldestCourses = courses.stream().reduce();
+//        Date youngestCourseDate = courses.stream().reduce();
+//        Date oldestCourseDate = courses.stream().reduce();
+//        Course[] youngestCourses = courses.stream().reduce();
+//        Course[] oldestCourses = courses.stream().reduce();
+
         //взять курсы по порядку, проверить, что наверху нужные курсы, первые и также внизу
         List<String> visibleCourses = driver.findElements(By.tagName("h6")).stream().map(WebElement::getText).toList();
         return this;

@@ -1,12 +1,12 @@
 import org.junit.jupiter.api.Test;
 import pages.MainPage;
 
-public class MainPage_Test {
+public class MainPageTest {
 
     MainPage mainPage = new MainPage();
 
     @Test
-    public void CheckCategoryOpenedAfterCheckBoxClick() {
+    public void CheckCategoryOpenedAfterCheckBoxClickTest() {
         mainPage
                 .open()
                 .clickMenuLearning()
