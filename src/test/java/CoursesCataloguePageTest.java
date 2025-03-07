@@ -10,8 +10,8 @@ public class CoursesCataloguePageTest {
         coursesCataloguePage
                 .open()
                 .findCoursePlateByCourseName("Symfony Framework")
-                .clickCoursePlate("Symfony Framework");
-                //.pageHeaderShouldBeSameAs("Symfony Framework");
+                .clickCoursePlate("Symfony Framework")
+                .pageHeaderShouldBeSameAs("Symfony Framework");
     }
 
     @Test

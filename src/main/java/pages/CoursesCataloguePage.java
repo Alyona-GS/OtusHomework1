@@ -61,22 +61,14 @@ public class CoursesCataloguePage extends AbsBasePage {
     }
 
     public AbsCoursePage clickCoursePlate(String courseName) {
-        this.waiters.waitForElementVisible(driver.findElement(By.xpath("//div/a[last()]")));
-        List<WebElement> plates = driver.findElements(By.xpath("//div/a[contains(@href, '/lessons/')]"));
-        List<String> plateTexts = plates.stream().map(WebElement::getText).toList();
-        plateTexts.forEach((i) -> System.out.println("qwe" + i));
-        plates.forEach((plate) -> {
-            String text = plate.getText();
-            if (text.contains(courseName)) {
-                this.waiters.waitForElementToBeClickable(plate);
-                plate.click();
-            }
-        });
+        WebElement plate = driver.findElement(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0') and contains(.//h6, '"+courseName+"')]"));
+        this.waiters.waitForElementToBeClickable(plate);
+        plate.click();
         return new AbsCoursePage();
     }
 
     public CoursesCataloguePage findCourses() {
-        List<WebElement> plates = driver.findElements(By.xpath("//a[contains(@href, '/lessons/')]"));
+        List<WebElement> plates = driver.findElements(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0')]"));
         WebElement buttonShowMore = findElement(By.xpath("//*[contains(@class, 'sc-mrx253-0 enxKCy sc-prqxfo-0 cXVWAS')]"));
         while (buttonShowMore.isDisplayed()) {
             this.waiters.waitForElementToBeClickable(buttonShowMore);
