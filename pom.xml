@@ -16,7 +16,7 @@
         <selenium.version>4.27.0</selenium.version>
         <junit.version>5.11.3</junit.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
-        <assertj.version>3.26.3</assertj.version>
+        <assertj.version>3.27.3</assertj.version>
 
         <base.url>https://otus.ru</base.url>
         <browser.name>chrome</browser.name>

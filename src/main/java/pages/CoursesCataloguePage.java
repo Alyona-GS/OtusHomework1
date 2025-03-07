@@ -18,8 +18,14 @@ public class CoursesCataloguePage extends AbsBasePage {
         String path = getPath();
         driver.get(baseUrl + path);
         driver.manage().window().maximize();
-        findElement(By.xpath("//*[contains(@class, 'sticky-banner__close js-sticky-banner-close')]")).click();
-        findElement(By.xpath("//button[contains(@class, 'sc-9a4spb-0 ckCZjI')]")).click();
+        By byBanner = By.xpath("//*[contains(@class, 'sticky-banner__close js-sticky-banner-close')]");
+        By byBanner2 = By.xpath("//button[contains(@class, 'sc-9a4spb-0 ckCZjI')]");
+
+        this.waiters.waitForElementVisible(driver.findElement(byBanner));
+        this.waiters.waitForElementVisible(driver.findElement(byBanner2));
+
+        findElement(byBanner).click();
+        findElement(byBanner2).click();
         return this;
     }
 
@@ -34,9 +40,10 @@ public class CoursesCataloguePage extends AbsBasePage {
 
     public CoursesCataloguePage findCoursePlateByCourseName(String courseName) {
         WebElement buttonShowMore = findElement(By.xpath("//*[contains(@class, 'sc-mrx253-0 enxKCy sc-prqxfo-0 cXVWAS')]"));
-        List<String> visibleCourseNames = driver.findElements(By.tagName("h6")).stream().map(WebElement::getText).toList();
         boolean courseNotVisible = true;
-        while (buttonShowMore.isDisplayed() && (courseNotVisible)) {
+        while (courseNotVisible) {
+            this.waiters.waitForElementVisible(driver.findElement(By.tagName("h6")));
+            List<String> visibleCourseNames = driver.findElements(By.tagName("h6")).stream().map(WebElement::getText).toList();
             for (String course: visibleCourseNames) {
                 if (course.equals(courseName)) {
                     courseNotVisible = false;
@@ -44,6 +51,7 @@ public class CoursesCataloguePage extends AbsBasePage {
                 }
             }
             if (courseNotVisible) {
+                this.waiters.waitForElementToBeClickable(buttonShowMore);
                 buttonShowMore.click();
             } else {
                 break;
@@ -53,9 +61,14 @@ public class CoursesCataloguePage extends AbsBasePage {
     }
 
     public AbsCoursePage clickCoursePlate(String courseName) {
-        List<WebElement> plates = driver.findElements(By.xpath("//a[contains(@href, '/lessons/')]"));
+        this.waiters.waitForElementVisible(driver.findElement(By.xpath("//div/a[last()]")));
+        List<WebElement> plates = driver.findElements(By.xpath("//div/a[contains(@href, '/lessons/')]"));
+        List<String> plateTexts = plates.stream().map(WebElement::getText).toList();
+        plateTexts.forEach((i) -> System.out.println("qwe" + i));
         plates.forEach((plate) -> {
-            if (plate.getText().contains(courseName) && plate.isDisplayed()) {
+            String text = plate.getText();
+            if (text.contains(courseName)) {
+                this.waiters.waitForElementToBeClickable(plate);
                 plate.click();
             }
         });
@@ -66,7 +79,7 @@ public class CoursesCataloguePage extends AbsBasePage {
         List<WebElement> plates = driver.findElements(By.xpath("//a[contains(@href, '/lessons/')]"));
         WebElement buttonShowMore = findElement(By.xpath("//*[contains(@class, 'sc-mrx253-0 enxKCy sc-prqxfo-0 cXVWAS')]"));
         while (buttonShowMore.isDisplayed()) {
-                waiters.waitForElementVisibleElement(buttonShowMore);
+            this.waiters.waitForElementToBeClickable(buttonShowMore);
                 buttonShowMore.click();
         }
         List<Course> courses = new ArrayList<>();
@@ -88,53 +101,27 @@ public class CoursesCataloguePage extends AbsBasePage {
     public CoursesCataloguePage nameAndDateOnPlateIsRight() {
 
         return this;
-    };
+    }
 
     public CoursesCataloguePage checkCatalogueUrl() {
         if (category != null) {
-            String param = "programming";
-            switch (category) {
-                case "Программирование":
-                    param = "programming";
-                    break;
-                case "Архитектура":
-                    param = "architecture";
-                    break;
-                case "Data Science":
-                    param = "data-science";
-                    break;
-                case "Инфраструктура":
-                    param = "operations";
-                    break;
-                case "GameDev":
-                    param = "gamedev";
-                    break;
-                case "Безопасность":
-                    param = "information-security-courses";
-                    break;
-                case "Управление":
-                    param = "marketing-business";
-                    break;
-                case "Аналитика и анализ":
-                    param = "analytics";
-                    break;
-                case "Тестирование":
-                    param = "testing";
-                    break;
-                case "Корпоративные курсы":
-                    param = "corporate";
-                    break;
-                case "IT без программирования":
-                    param = "it-bez-programmirovanija";
-                    break;
-                case "OTUS Kids":
-                    param = "kids";
-                    break;
-                case "Специализации":
-                    param = "specialization";
-                    break;
-            }
-            String urlShouldBe = String.format("https://otus.ru/catalog/courses?categories=%s", param);
+            String param = switch (category) {
+							case "Программирование" -> "programming";
+							case "Архитектура" -> "architecture";
+							case "Data Science" -> "data-science";
+							case "Инфраструктура" -> "operations";
+							case "GameDev" -> "gamedev";
+							case "Безопасность" -> "information-security-courses";
+							case "Управление" -> "marketing-business";
+							case "Аналитика и анализ" -> "analytics";
+							case "Тестирование" -> "testing";
+							case "Корпоративные курсы" -> "corporate";
+							case "IT без программирования" -> "it-bez-programmirovanija";
+							case "OTUS Kids" -> "kids";
+							case "Специализации" -> "specialization";
+							default -> "programming";
+						};
+					String urlShouldBe = String.format("https://otus.ru/catalog/courses?categories=%s", param);
             String urlBrowser = driver.getCurrentUrl();
             //assertThat(urlBrowser).isEquals(urlShouldBe); //проверить потом
         }
