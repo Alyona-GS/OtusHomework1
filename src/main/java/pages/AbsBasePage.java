@@ -8,20 +8,20 @@ import org.openqa.selenium.*;
 public class AbsBasePage<T> extends Common {
     public String baseUrl = "https://otus.ru";//System.getProperty("base.url");
 
-    public AbsBasePage() {
+    public AbsBasePage(WebDriver driver) {
         super();
         baseUrl = baseUrl;
     }
 
-//    public T open() {
-//        String path = getPath();
-//        if(path.isEmpty()) {
-//            throw new PathPageException();
-//        }
-//        driver.get(baseUrl + path);
-//
-//        return (T)this;
-//    }
+    public T open() {
+        String path = getPath();
+        if(path.isEmpty()) {
+            throw new PathPageException();
+        }
+        driver.get(baseUrl + path);
+
+        return (T)this;
+    }
 
     public String getPath() {
         Class<? extends AbsBasePage> clazz = this.getClass();

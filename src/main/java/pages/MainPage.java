@@ -2,14 +2,15 @@ package pages;
 
 import annotations.Path;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
 @Path("/")
-public class MainPage extends AbsBasePage {
-    public MainPage() {
-        super();
+public class MainPage extends AbsBasePage<MainPage> {
+    public MainPage(WebDriver driver) {
+        super(driver);
     }
 
     public MainPage clickMenuLearning() {
@@ -23,15 +24,15 @@ public class MainPage extends AbsBasePage {
         String categoryText = category.getText();
         System.out.println(categoryText);
         category.click();
-        return new CoursesCataloguePage(categoryText);
+        return new CoursesCataloguePage(categoryText, driver);
     }
 
-    public MainPage open() {
-
-        String path = getPath();
-
-        driver.get(baseUrl + path);
-        driver.manage().window().maximize();
-        return this;
-    }
+//    public MainPage open() {
+//
+//        String path = getPath();
+//
+//        driver.get(baseUrl + path);
+//        driver.manage().window().maximize();
+//        return this;
+//    }
 }
