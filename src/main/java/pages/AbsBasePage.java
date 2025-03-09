@@ -19,6 +19,7 @@ public class AbsBasePage<T> extends Common {
             throw new PathPageException();
         }
         driver.get(baseUrl + path);
+        driver.manage().window().maximize();
 
         return (T)this;
     }

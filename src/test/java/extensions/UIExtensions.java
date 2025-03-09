@@ -12,13 +12,13 @@ public class UIExtensions implements BeforeEachCallback, AfterEachCallback {
 	private Injector injector;
 
 	@Override
-	public void afterEach(ExtensionContext context) {
+	public void beforeEach(ExtensionContext context) {
 		injector = Guice.createInjector(new GuiceModule());
 		injector.injectMembers(context.getTestInstance().get());
 	}
 
 	@Override
-	public void beforeEach(ExtensionContext context) {
+	public void afterEach(ExtensionContext context) {
 		WebDriver driver = injector.getInstance(WebDriver.class);
 		if (driver != null) {
 			driver.quit();
