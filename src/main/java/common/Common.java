@@ -2,6 +2,7 @@ package common;
 
 import factory.WebDriverFactory;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
 
 public class Common {
     protected WebDriver driver;
@@ -11,6 +12,6 @@ public class Common {
     public Common() {
         this.driver = factory.create();
         this.waiters = new Waiters(driver);
-        //PageFactory.initElements(driver, this);
+        PageFactory.initElements(driver, this);
     }
 }
