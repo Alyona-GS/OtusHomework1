@@ -1,17 +1,20 @@
 package pages;
 
 import annotations.Path;
-import models.Course;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.sql.Date;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
 @Path("/catalog/courses")
-public class CoursesCataloguePage extends AbsBasePage {
+public class CoursesCataloguePage extends AbsBasePage<CoursesCataloguePage> {
     private String category;
+    private List<String>  minDateCourse;
+    private List<String>  maxDateCourse;
 
     public CoursesCataloguePage open() {
 
@@ -29,12 +32,12 @@ public class CoursesCataloguePage extends AbsBasePage {
         return this;
     }
 
-    public CoursesCataloguePage() {
-        super();
+    public CoursesCataloguePage(WebDriver driver) {
+        super(driver);
     }
 
-    public CoursesCataloguePage(String category) {
-        super();
+    public CoursesCataloguePage(String category, WebDriver driver) {
+        super(driver);
         this.category = category;
     }
 
@@ -64,35 +67,37 @@ public class CoursesCataloguePage extends AbsBasePage {
         WebElement plate = driver.findElement(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0') and contains(.//h6, '"+courseName+"')]"));
         this.waiters.waitForElementToBeClickable(plate);
         plate.click();
-        return new AbsCoursePage();
+        return new AbsCoursePage(driver);
     }
 
-    public CoursesCataloguePage findCourses() {
-        List<WebElement> plates = driver.findElements(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0')]"));
+    public CoursesCataloguePage findMinMaxDateCourses() {
         WebElement buttonShowMore = findElement(By.xpath("//*[contains(@class, 'sc-mrx253-0 enxKCy sc-prqxfo-0 cXVWAS')]"));
-        while (buttonShowMore.isDisplayed()) {
-            this.waiters.waitForElementToBeClickable(buttonShowMore);
+        while (this.waiters.waitForElementToBeClickable(buttonShowMore)) {
                 buttonShowMore.click();
         }
-        List<Course> courses = new ArrayList<>();
-        plates.forEach((plate) -> {
-            String plateText = plate.getText();
-            System.out.println(plateText);
-            String[] splittedText = plateText.split("/n");
-            courses.add(new Course(splittedText[0], Date.valueOf(splittedText[2])));
-        });
-//        Date youngestCourseDate = courses.stream().reduce();
-//        Date oldestCourseDate = courses.stream().reduce();
-//        Course[] youngestCourses = courses.stream().reduce();
-//        Course[] oldestCourses = courses.stream().reduce();
-
-        //взять курсы по порядку, проверить, что наверху нужные курсы, первые и также внизу
-        List<String> visibleCourses = driver.findElements(By.tagName("h6")).stream().map(WebElement::getText).toList();
+        List<String> plates = driver
+            .findElements(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0')]"))
+            .stream().map(WebElement::getText).toList();
+//        minDateCourse = plates.reduce((a, b) -> {
+//            String dataA = Arrays.stream(a.split("/n")).toList().get(3);
+//            System.out.println(dataA);
+//            String dataB = Arrays.stream(b.split("/n")).toList().get(3);
+//            return Date.valueOf(dataA) - Date.valueOf(dataB);
+//        });
+//        maxDateCourse = plates.reduce((a, b) -> {
+//            String dataA = Arrays.stream(a.split("/n")).toList().get(3);
+//            System.out.println(dataA);
+//            String dataB = Arrays.stream(b.split("/n")).toList().get(3);
+//            return Date.valueOf(dataA) - Date.valueOf(dataB);
+//        });
         return this;
     }
-    public CoursesCataloguePage nameAndDateOnPlateIsRight() {
 
-        return this;
+    public void nameAndDateOnMinMaxPlateCoursesIsRight() throws IOException {
+        Document document = Jsoup.connect("https://otus.ru").get();
+        minDateCourse.get(4);
+        maxDateCourse.get(2);
+//        document.
     }
 
     public CoursesCataloguePage checkCatalogueUrl() {
@@ -114,7 +119,7 @@ public class CoursesCataloguePage extends AbsBasePage {
 							default -> "programming";
 						};
 					String urlShouldBe = String.format("https://otus.ru/catalog/courses?categories=%s", param);
-            String urlBrowser = driver.getCurrentUrl();
+          String urlBrowser = driver.getCurrentUrl();
             //assertThat(urlBrowser).isEquals(urlShouldBe); //проверить потом
         }
         return this;
