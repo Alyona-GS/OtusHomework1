@@ -18,16 +18,16 @@ public class WebDriverFactory {
     private final String browserName = "firefox";//System.getProperty("browser.name");
 
     public WebDriver create() {
-        return switch (browserName) {
+        switch (browserName) {
             case "chrome" -> {
                 WebDriverManager.chromedriver().setup();
-                yield new ChromeDriver((ChromeOptions) new ChromeSettings().settings());
+                return new ChromeDriver((ChromeOptions) new ChromeSettings().settings());
             }
             case "firefox" -> {
                 WebDriverManager.firefoxdriver().setup();
-                yield new FirefoxDriver((FirefoxOptions) new FirefoxSettings().settings());
+                return new FirefoxDriver((FirefoxOptions) new FirefoxSettings().settings());
             }
             default -> throw new BrowserNotFoundException();
-        };
+        }
     }
 }

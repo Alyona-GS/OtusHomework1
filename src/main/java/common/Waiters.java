@@ -14,7 +14,7 @@ public class Waiters {
 	private WebDriverWait webDriverWait;
 
 	public Waiters(WebDriver driver) {
-		this.webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		this.webDriverWait = new WebDriverWait(driver, Duration.ofSeconds(15));
 	}
 
 	public boolean waitForCondition(ExpectedCondition condition) {
@@ -39,6 +39,6 @@ public class Waiters {
 	}
 
 	public boolean waitForElementToBeClickable(WebElement element) {
-		return this.waitForCondition(ExpectedConditions.elementToBeClickable(element));
+		return this.waitForCondition(ExpectedConditions.stalenessOf(element));
 	}
 }

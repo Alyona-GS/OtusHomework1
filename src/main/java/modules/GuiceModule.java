@@ -30,7 +30,7 @@ public class GuiceModule extends AbstractModule {
 
 	@Singleton
 	@Provides
-	public CoursesCataloguePage getTeachPage() {
+	public CoursesCataloguePage getCoursesCataloguePage() {
 		return new CoursesCataloguePage(driver);
 	}
 

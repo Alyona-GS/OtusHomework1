@@ -1,5 +1,6 @@
 import com.google.inject.Inject;
 import extensions.UIExtensions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import pages.CoursesCataloguePage;
@@ -13,16 +14,16 @@ public class CoursesCataloguePageTest {
     public void checkCourseOpenedByCoursePlateTest() {
         coursesCataloguePage
                 .open()
-                .findCoursePlateByCourseName("Алгоритмы и структуры данных")
-                .clickCoursePlate("Алгоритмы и структуры данных")
-                .pageHeaderShouldBeSameAs("Алгоритмы и структуры данных");
+                .findCoursePlateByCourseName("Machine Learning")
+                .clickCoursePlate("Machine Learning")
+                .pageHeaderShouldBeSameAs("Machine Learning");
     }
 
     @Test
     public void checkNameAndDateOnCoursePlateTest() {
         coursesCataloguePage
                 .open()
-                .findMinMaxDateCourses();
-                //.nameAndDateOnMinMaxPlateCoursesIsRight();
+                .findMinMaxDateCourses()
+                .nameAndDateOnMinMaxPlateCoursesIsRight();
     }
 }

@@ -5,11 +5,11 @@ import exceptions.PathPageException;
 import common.Common;
 import org.openqa.selenium.*;
 
-public class AbsBasePage<T> extends Common {
+public abstract class AbsBasePage<T> extends Common {
     public String baseUrl = "https://otus.ru";//System.getProperty("base.url");
 
     public AbsBasePage(WebDriver driver) {
-        super();
+        super(driver);
         baseUrl = baseUrl;
     }
 
@@ -20,6 +20,15 @@ public class AbsBasePage<T> extends Common {
         }
         driver.get(baseUrl + path);
         driver.manage().window().maximize();
+
+        //By byBanner = By.xpath("//*[contains(@class, 'sticky-banner__close js-sticky-banner-close')]");
+        By byBanner2 = By.xpath("//button[contains(@class, 'sc-bvhtwp-0 fyDiti')]");
+
+        //this.waiters.waitForElementVisible(driver.findElement(byBanner));
+        this.waiters.waitForElementVisible(driver.findElement(byBanner2));
+
+        //findElement(byBanner).click();
+        findElement(byBanner2).click();
 
         return (T)this;
     }
