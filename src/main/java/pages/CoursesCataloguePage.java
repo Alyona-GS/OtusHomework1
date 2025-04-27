@@ -3,16 +3,13 @@ package pages;
 import annotations.Path;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -20,26 +17,10 @@ import java.util.Locale;
 @Path("/catalog/courses")
 public class CoursesCataloguePage extends AbsBasePage<CoursesCataloguePage> {
     private String category;
-		private String minDate;
-		private String maxDate;
-    private List<String>  minDateCourses;
-    private List<String>  maxDateCourses;
-
-//    public CoursesCataloguePage open() {
-//
-//        String path = getPath();
-//        driver.get(baseUrl + path);
-//        driver.manage().window().maximize();
-//        By byBanner = By.xpath("//*[contains(@class, 'sticky-banner__close js-sticky-banner-close')]");
-//        By byBanner2 = By.xpath("//button[contains(@class, 'sc-9a4spb-0 ckCZjI')]");
-//
-//        this.waiters.waitForElementVisible(driver.findElement(byBanner));
-//        this.waiters.waitForElementVisible(driver.findElement(byBanner2));
-//
-//        findElement(byBanner).click();
-//        findElement(byBanner2).click();
-//        return this;
-//    }
+    private String minDate;
+    private String maxDate;
+    private List<String> minDateCourses;
+    private List<String> maxDateCourses;
 
     public CoursesCataloguePage(WebDriver driver) {
         super(driver);
@@ -56,7 +37,7 @@ public class CoursesCataloguePage extends AbsBasePage<CoursesCataloguePage> {
         while (courseNotVisible) {
             this.waiters.waitForElementVisible(driver.findElement(By.tagName("h6")));
             List<String> visibleCourseNames = driver.findElements(By.tagName("h6")).stream().map(WebElement::getText).toList();
-            for (String course: visibleCourseNames) {
+            for (String course : visibleCourseNames) {
                 if (course.equals(courseName)) {
                     courseNotVisible = false;
                     break;
@@ -73,108 +54,108 @@ public class CoursesCataloguePage extends AbsBasePage<CoursesCataloguePage> {
     }
 
     public AbsCoursePage clickCoursePlate(String courseName) {
-        WebElement plate = driver.findElement(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0') and contains(.//h6, '"+courseName+"')]"));
+        WebElement plate = driver.findElement(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0') and contains(.//h6, '" + courseName + "')]"));
         this.waiters.waitForElementToBeClickable(plate);
         plate.click();
         return new AbsCoursePage(driver);
     }
 
-		public CoursesCataloguePage findMinMaxDateCourses() {
+    public CoursesCataloguePage findMinMaxDateCourses() {
         WebElement buttonShowMore = findElement(By.xpath("//*[contains(@class, 'sc-1qig7zt-0 bYRRHi sc-prqxfo-0 cXVWAS')]"));
-				while (this.waiters.waitForElementToBeClickable(buttonShowMore)) {
-						buttonShowMore.click();
-				}
-			  SimpleDateFormat format = new SimpleDateFormat("dd MMMM, yyyy", new Locale("ru"));
+        while (this.waiters.waitForElementToBeClickable(buttonShowMore)) {
+            buttonShowMore.click();
+        }
+        SimpleDateFormat format = new SimpleDateFormat("dd MMMM, yyyy", new Locale("ru"));
         List<Date> dates = driver
-            .findElements(By.xpath("//section/div/div/a/div/div/div[contains(@class, 'sc-hrqzy3-1 jEGzDf') and not(descendant::img)]"))
-            .stream().map(WebElement::getText)
-            .map((date) -> date.substring(0, date.indexOf("·")).trim())
-						.filter((date) -> (date.length() - date.replace(" ", "").length()) == 2)
-						.map((date) -> {
-							try {
-								return format.parse(date);
-							} catch (ParseException e) {
-								throw new RuntimeException(e);
-							}
-						}).toList();
-        
+                .findElements(By.xpath("//section/div/div/a/div/div/div[contains(@class, 'sc-hrqzy3-1 jEGzDf') and not(descendant::img)]"))
+                .stream().map(WebElement::getText)
+                .map((date) -> date.substring(0, date.indexOf("·")).trim())
+                .filter((date) -> (date.length() - date.replace(" ", "").length()) == 2)
+                .map((date) -> {
+                    try {
+                        return format.parse(date);
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
+
         String minDate = format.format(dates.stream().min(Date::compareTo).get());
-				String maxDate = format.format(dates.stream().max(Date::compareTo).get());
+        String maxDate = format.format(dates.stream().max(Date::compareTo).get());
 
-				minDateCourses = driver
-						.findElements(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0')]"))
-						.stream().map(WebElement::getText)
-						.filter((plate) -> plate.contains(minDate)).map((plate) -> {
-							String text = plate.split("\n")[1];
-							if (text.contains("Успеть!") || text.contains("Скидка")) {
-								return plate.split("\n")[2];
-							} else {
-								return text;
-							}
-						}).toList();
+        minDateCourses = driver
+                .findElements(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0')]"))
+                .stream().map(WebElement::getText)
+                .filter((plate) -> plate.contains(minDate)).map((plate) -> {
+                    String text = plate.split("\n")[1];
+                    if (text.contains("Успеть!") || text.contains("Скидка")) {
+                        return plate.split("\n")[2];
+                    } else {
+                        return text;
+                    }
+                }).toList();
 
-				maxDateCourses = driver
-						.findElements(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0')]"))
-						.stream().map(WebElement::getText)
-						.filter((plate) -> plate.contains(maxDate)).map((plate) -> {
-							String text = plate.split("\n")[1];
-							if (text.contains("Успеть!") || text.contains("Скидка")) {
-								return plate.split("\n")[2];
-							} else {
-								return text;
-							}
-						}).toList();
-				return this;
+        maxDateCourses = driver
+                .findElements(By.xpath("//section/div/div/a[contains(@class, 'sc-zzdkm7-0')]"))
+                .stream().map(WebElement::getText)
+                .filter((plate) -> plate.contains(maxDate)).map((plate) -> {
+                    String text = plate.split("\n")[1];
+                    if (text.contains("Успеть!") || text.contains("Скидка")) {
+                        return plate.split("\n")[2];
+                    } else {
+                        return text;
+                    }
+                }).toList();
+        return this;
     }
 
     public void nameAndDateOnMinMaxPlateCoursesIsRight() {
-			Document document = null;
-			try {
-				document = Jsoup.connect("https://otus.ru").get();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-			Elements courseNames = document.select("h6 > div.sc-hrqzy3-1 jEGzDf");
-			Elements courseDates = document.select("a > div:nth-child(2) > div > div");
-			String minDateCourse = courseNames.get(0).text();
-			String minDateJsoup = courseNames.get(0).text();
-			if (!(minDateCourses.contains(minDateCourse) && (minDateJsoup.contains(minDate.toString())))) {
-				throw new RuntimeException("Course with min date is not the first course");
-			}
-			String maxDateCourse = courseNames.get(courseNames.size() - 1).text();
-			String maxDateJsoup = courseNames.get(courseNames.size() - 1).text();
-			if (!(maxDateCourses.contains(maxDateCourse) && (maxDateJsoup.contains(maxDate.toString())))) {
-				throw new RuntimeException("Course with max date is not the last course");
-			}
+        Document document = null;
+        try {
+            document = Jsoup.connect("https://otus.ru").get();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Elements courseNames = document.select("h6 > div.sc-hrqzy3-1 jEGzDf");
+        Elements courseDates = document.select("a > div:nth-child(2) > div > div");
+        String minDateCourse = courseNames.get(0).text();
+        String minDateJsoup = courseNames.get(0).text();
+        if (!(minDateCourses.contains(minDateCourse) && (minDateJsoup.contains(minDate)))) {
+            throw new RuntimeException("Course with min date is not the first course");
+        }
+        String maxDateCourse = courseNames.get(courseNames.size() - 1).text();
+        String maxDateJsoup = courseNames.get(courseNames.size() - 1).text();
+        if (!(maxDateCourses.contains(maxDateCourse) && (maxDateJsoup.contains(maxDate)))) {
+            throw new RuntimeException("Course with max date is not the last course");
+        }
     }
 
     public CoursesCataloguePage checkCatalogueUrl() {
         if (category != null) {
             String param = switch (category) {
-							case "Программирование" -> "programming";
-							case "Архитектура" -> "architecture";
-							case "Data Science" -> "data-science";
-							case "Инфраструктура" -> "operations";
-							case "GameDev" -> "gamedev";
-							case "Безопасность" -> "information-security-courses";
-							case "Управление" -> "marketing-business";
-							case "Аналитика и анализ" -> "analytics";
-							case "Тестирование" -> "testing";
-							case "Корпоративные курсы" -> "corporate";
-							case "IT без программирования" -> "it-bez-programmirovanija";
-							case "OTUS Kids" -> "kids";
-							case "Специализации" -> "specialization";
-							default -> "programming";
-						};
-					String urlShouldBe = String.format("https://otus.ru/catalog/courses?categories=%s", param);
-          String urlBrowser = driver.getCurrentUrl();
-					if (!urlShouldBe.equals(urlBrowser)) {
-						try {
-							throw new Exception("Url is not right");
-						} catch (Exception e) {
-							throw new RuntimeException(e);
-						}
-					}
+                case "Программирование" -> "programming";
+                case "Архитектура" -> "architecture";
+                case "Data Science" -> "data-science";
+                case "Инфраструктура" -> "operations";
+                case "GameDev" -> "gamedev";
+                case "Безопасность" -> "information-security-courses";
+                case "Управление" -> "marketing-business";
+                case "Аналитика и анализ" -> "analytics";
+                case "Тестирование" -> "testing";
+                case "Корпоративные курсы" -> "corporate";
+                case "IT без программирования" -> "it-bez-programmirovanija";
+                case "OTUS Kids" -> "kids";
+                case "Специализации" -> "specialization";
+                default -> "programming";
+            };
+            String urlShouldBe = String.format("https://otus.ru/catalog/courses?categories=%s", param);
+            String urlBrowser = driver.getCurrentUrl();
+            if (!urlShouldBe.equals(urlBrowser)) {
+                try {
+                    throw new Exception("Url is not right");
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
         return this;
     }

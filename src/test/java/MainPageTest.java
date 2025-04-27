@@ -10,7 +10,7 @@ public class MainPageTest {
     MainPage mainPage;
 
     @Test
-    public void CheckCategoryOpenedAfterCheckBoxClickTest() {
+    public void checkCategoryOpenedAfterCheckBoxClickTest() {
         mainPage
                 .open()
                 .clickMenuLearning()
